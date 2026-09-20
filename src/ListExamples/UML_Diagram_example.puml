@@ -1,0 +1,92 @@
+@startuml
+class ListExamples.SimpleLinkedList.SimpleLinkedList {
++ void insertDataAtBeginning(T)
++ void insertDataAtEnd(T)
++ void insertDataSorted(T)
++ void deleteData(T)
+}
+
+class ListExamples.QueueLinkedList.PriorityQueueLinkedList {
++ void enqueue(T)
+}
+
+abstract class ListExamples.LinkedList {
+# Node<T> First
+# Node<T> Last
+# int Size
+# boolean insertInitialElement(Node<T>)
++ {abstract}void insertDataAtBeginning(T)
++ {abstract}void insertDataAtEnd(T)
++ {abstract}void insertDataSorted(T)
++ {abstract}void deleteData(T)
++ boolean searchData(T)
+# Node<T> searchAndGetNode(T)
++ int getSize()
++ void printList()
++ Node<T> getFirst()
++ Node<T> getLast()
+}
+
+
+class ListExamples.StackLinkedList.StackLinkedList {
+- int maxSize
+- int CurrentIndex
++ Node<T> pop()
++ void push(T)
++ Node<T> peek()
+}
+
+
+class ListExamples.DoublyLinkedList.DoublyLinkedList {
++ void insertDataAtBeginning(T)
++ void insertDataAtEnd(T)
++ void insertDataSorted(T)
++ void deleteData(T)
+}
+
+class ListExamples.QueueLinkedList.QueueLinkedList {
+# int maxSize
+# int currentIndex
++ Node<T> dequeue()
++ void enqueue(T)
++ Node<T> peek()
+}
+
+
+class ListExamples.CircularLinkedList.CircularLinkedList {
++ void insertDataAtBeginning(T)
++ void insertDataAtEnd(T)
++ void insertDataSorted(T)
++ void deleteData(T)
+}
+
+class ListExamples.Node {
+- T data
+- Node<T> next
+- Node<T> previous
++ T getData()
++ void setData(T)
++ Node<T> getNext()
++ void setNext(Node<T>)
++ Node<T> getPrevious()
++ void setPrevious(Node<T>)
+}
+
+
+class ListExamples.DoublyCircularLinkedList.DoublyCircularLinkedList {
++ void insertDataAtBeginning(T)
++ void insertDataAtEnd(T)
++ void insertDataSorted(T)
++ void deleteData(T)
+}
+
+
+
+ListExamples.LinkedList <|-- ListExamples.SimpleLinkedList.SimpleLinkedList
+ListExamples.QueueLinkedList.QueueLinkedList <|-- ListExamples.QueueLinkedList.PriorityQueueLinkedList
+ListExamples.SimpleLinkedList.SimpleLinkedList <|-- ListExamples.StackLinkedList.StackLinkedList
+ListExamples.LinkedList <|-- ListExamples.DoublyLinkedList.DoublyLinkedList
+ListExamples.DoublyLinkedList.DoublyLinkedList <|-- ListExamples.QueueLinkedList.QueueLinkedList
+ListExamples.LinkedList <|-- ListExamples.CircularLinkedList.CircularLinkedList
+ListExamples.LinkedList <|-- ListExamples.DoublyCircularLinkedList.DoublyCircularLinkedList
+@enduml
