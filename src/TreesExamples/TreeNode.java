@@ -5,6 +5,16 @@ public class TreeNode<T> {
     private TreeNode<T> left;
     private T data;
 
+    public TreeNode(T element) {
+        this(element, null, null);
+    }
+
+    public TreeNode(T element, TreeNode<T> left, TreeNode<T> right) {
+        this.data = element;
+        this.left = left;
+        this.right = right;
+    }
+
     public TreeNode<T> getRight() {
         return right;
     }
