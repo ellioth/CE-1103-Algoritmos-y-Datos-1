@@ -35,41 +35,69 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
     private TreeNode<T> checkAndRotate(TreeNode<T> node, int balanceFactor){
         if (balanceFactor == 2){
             // Let's do a rotation to the right!!
-            // TODO: implement the rotation and calculate the heigh once again to double check
+            // Let's check if the balance factor of my right child is also positive
+            if (getBalanceFactor(node.getRight()) > 0){
+                // we need to do a RR rotate.
+                return rotateRR(node);
+            }
+            // We need to do a RL rotation
+            return rotateRL(node);
         } else if (balanceFactor == -2){
             // Let's do a rotation to the left!!
-            // TODO: implement the rotation and calculate the heigh once again to double check
+            // Let's check if the balance factor of my left child is also negative
+            if (getBalanceFactor(node.getLeft()) < 0){
+                // we need to do a LL rotate.
+                return rotateLL(node);
+            }
+            // We need to do a LR rotation
+            return rotateLR(node);
         }
+        // No rotation was needed.
         return node;
     }
 
     private TreeNode<T> rotateLL(TreeNode<T> tempParent){
         // We need to roate to the right because my child nodes are heavier on the left - left side
-        TreeNode<T> firstLeftNode = tempParent.getLeft();
-        tempParent.setLeft(firstLeftNode.getRight());
-        firstLeftNode.setRight(tempParent);
-        return firstLeftNode;
+        TreeNode<T> firstNode = tempParent.getLeft();
+        tempParent.setLeft(firstNode.getRight());
+        firstNode.setRight(tempParent);
+        return firstNode;
     }
 
     private TreeNode<T> rotateRR(TreeNode<T> tempParent){
         // We need to roate to the left because my child nodes are heavier on the right - right side
-        TreeNode<T> newRoot = tempParent;
-
-        return newRoot;
+        TreeNode<T> firstNode = tempParent.getRight();
+        tempParent.setRight(firstNode.getLeft());
+        firstNode.setLeft(tempParent);
+        return firstNode;
     }
 
     private TreeNode<T> rotateLR(TreeNode<T> tempParent){
-        // We need to roate to the right because my child nodes are heavier on the left - right side
-        TreeNode<T> newRoot = tempParent;
-
-        return newRoot;
+        // We need to rotate to the right because my child nodes are heavier on the left - right side
+        TreeNode<T> leftNode = tempParent.getRight();
+        TreeNode<T> rightLeftNode = leftNode.getLeft(); //aka new head
+        // Let's connect the childs of leftRightNode to other nodes.
+        tempParent.setLeft(rightLeftNode.getRight());
+        leftNode.setRight(rightLeftNode.getLeft());
+        // Let's connect the tempParent and rightNode to the new head.
+        rightLeftNode.setRight(tempParent);
+        rightLeftNode.setLeft(leftNode);
+        // Let's return the new head
+        return rightLeftNode;
     }
 
     private TreeNode<T> rotateRL(TreeNode<T> tempParent){
         // We need to roate to the right because my child nodes are heavier on the right - left side
-        TreeNode<T> newRoot = tempParent;
-
-        return newRoot;
+        TreeNode<T> rightNode = tempParent.getRight();
+        TreeNode<T> leftRightNode = rightNode.getLeft(); // aka new head
+        // Let's connect the childs of leftRightNode to other nodes.
+        tempParent.setRight(leftRightNode.getLeft());
+        rightNode.setLeft(leftRightNode.getRight());
+        // Let's connect the tempParent and rightNode to the new head.
+        leftRightNode.setLeft(tempParent);
+        leftRightNode.setRight(rightNode);
+        // Let's return the new head
+        return leftRightNode;
     }
 
     @Override
