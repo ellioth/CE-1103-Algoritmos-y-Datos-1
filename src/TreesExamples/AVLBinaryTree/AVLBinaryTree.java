@@ -45,9 +45,10 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
 
     private TreeNode<T> rotateLL(TreeNode<T> tempParent){
         // We need to roate to the right because my child nodes are heavier on the left - left side
-        TreeNode<T> newRoot = tempParent;
-
-        return newRoot;
+        TreeNode<T> firstLeftNode = tempParent.getLeft();
+        tempParent.setLeft(firstLeftNode.getRight());
+        firstLeftNode.setRight(tempParent);
+        return firstLeftNode;
     }
 
     private TreeNode<T> rotateRR(TreeNode<T> tempParent){
