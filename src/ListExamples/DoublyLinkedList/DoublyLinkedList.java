@@ -36,28 +36,23 @@ public class DoublyLinkedList<T extends Comparable<T>> extends LinkedList<T>{
     @Override
     public void insertDataSorted(T newData) {
         // 1: List is empty
-        if (this.First == null) {
-            this.insertDataAtBeginning(newData);
-            return;
-        }
-
         // 2: At least one item, it's the smallest, goes to the head/first.
-        if (newData.compareTo(this.First.getData()) <= 0) {
+        if (this.First == null || newData.compareTo(this.First.getData()) <= 0) {
             this.insertDataAtBeginning(newData);
             return;
         }
 
         // 3: At least one item, it's the biggest, goes to the tail/last.
-        if (newData.compareTo(this.Last.getData()) >= 0) {
+        if (newData.compareTo(this.Last.getData()) > 0) {
             this.insertDataAtEnd(newData);
             return;
         }
-        // 4: Insert at the middle, at least two nodes, it will in between First and Last.
+        // 4: Insert at the middle, at least two nodes, it will be in between First and Last.
         Node<T> tempPreviousNode = this.First;
         Node<T> tempCurrentNode = this.First.getNext();
 
         // Let's get the node before the one that we're inserting.
-        while (tempCurrentNode != this.First) {
+        while (tempCurrentNode != null) {
             if (tempCurrentNode.getData().compareTo(newData) > 0) {
                 break; // By breaking here: tempPreviousNode < newData < tempCurrentNode
             }
@@ -66,6 +61,7 @@ public class DoublyLinkedList<T extends Comparable<T>> extends LinkedList<T>{
         }
 
         // Let's do the connection among the nodes
+        // previous-node <-> newNode <-> current-node
         Node<T> newNode = new Node<>(newData);
         newNode.setNext(tempCurrentNode);
         newNode.setPrevious(tempPreviousNode);

@@ -111,7 +111,8 @@ public class CircularLinkedList<T extends Comparable<T>> extends LinkedList<T> {
             tempCurrentNode = tempCurrentNode.getNext();
         }
 
-        // Let's do the connection amongh the nodes
+        // Let's do the connection among the nodes
+        // previous-node -> newNode -> CurrentNode
         Node<T> newNode = new Node<>(newData);
         newNode.setNext(tempCurrentNode);
         tempPreviousNode.setNext(newNode);
