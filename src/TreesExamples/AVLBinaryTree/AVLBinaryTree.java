@@ -9,7 +9,7 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
     public void insertData(T newData) {
         super.insertData(newData);
         // Let's check if we need to balance the tree
-        checkAndRotate(this.root, getBalanceFactor(this.root));
+        this.root = checkAndRotate(this.root);
     }
 
     private int getBalanceFactor(TreeNode<T> node) {
@@ -18,9 +18,8 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
         }
         int rightHeight = getHeight(node.getRight());
         int leftHeight = getHeight(node.getLeft());
-        int tempBalanceFactor = rightHeight - leftHeight;
         // Let's check if we need to balance the tree.
-        return getBalanceFactor(checkAndRotate(node, tempBalanceFactor));
+        return rightHeight - leftHeight;
     }
 
     private int getHeight(TreeNode<T> node) {
@@ -32,20 +31,21 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
-    private TreeNode<T> checkAndRotate(TreeNode<T> node, int balanceFactor){
-        if (balanceFactor == 2){
-            // Let's do a rotation to the right!!
+    private TreeNode<T> checkAndRotateAux(TreeNode<T> node){
+        int balanceFactor = getBalanceFactor(node);
+        if (balanceFactor > 1){
+            // Let's do a rotation to the Left!!
             // Let's check if the balance factor of my right child is also positive
-            if (getBalanceFactor(node.getRight()) > 0){
+            if (getBalanceFactor(node.getRight()) >= 0){
                 // we need to do a RR rotate.
                 return rotateRR(node);
             }
             // We need to do a RL rotation
             return rotateRL(node);
-        } else if (balanceFactor == -2){
-            // Let's do a rotation to the left!!
+        } else if (balanceFactor < -1){
+            // Let's do a rotation to the Right!!
             // Let's check if the balance factor of my left child is also negative
-            if (getBalanceFactor(node.getLeft()) < 0){
+            if (getBalanceFactor(node.getLeft()) <= 0){
                 // we need to do a LL rotate.
                 return rotateLL(node);
             }
@@ -54,6 +54,17 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
         }
         // No rotation was needed.
         return node;
+    }
+
+    private TreeNode<T> checkAndRotate(TreeNode<T> node){
+        if (node == null){
+            return null;
+        }
+        // Let's traversee the tree bottom to top and check if we need to do a rotation
+        node.setLeft(checkAndRotate(node.getLeft()));
+        node.setRight(checkAndRotate(node.getRight()));
+
+        return checkAndRotateAux(node);
     }
 
     private TreeNode<T> rotateLL(TreeNode<T> tempParent){
@@ -74,8 +85,8 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
 
     private TreeNode<T> rotateLR(TreeNode<T> tempParent){
         // We need to rotate to the right because my child nodes are heavier on the left - right side
-        TreeNode<T> leftNode = tempParent.getRight();
-        TreeNode<T> rightLeftNode = leftNode.getLeft(); //aka new head
+        TreeNode<T> leftNode = tempParent.getLeft();
+        TreeNode<T> rightLeftNode = leftNode.getRight(); //aka new head
         // Let's connect the childs of leftRightNode to other nodes.
         tempParent.setLeft(rightLeftNode.getRight());
         leftNode.setRight(rightLeftNode.getLeft());
