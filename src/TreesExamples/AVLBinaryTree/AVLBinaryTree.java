@@ -7,9 +7,33 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
 
     @Override
     public void insertData(T newData) {
-        super.insertData(newData);
-        // Let's check if we need to balance the tree
-        this.root = checkAndRotate(this.root);
+        this.root = insertData(newData, this.root);
+    }
+
+    private TreeNode<T> insertData(T newData, TreeNode<T> node){
+
+        if(node == null){
+            return new TreeNode<>(newData);
+        }
+
+        int comparison = node.getData().compareTo(newData);
+
+        if(comparison > 0){
+            node.setLeft(
+                    insertData(newData, node.getLeft())
+            );
+        }
+        else if(comparison < 0){
+            node.setRight(
+                    insertData(newData, node.getRight())
+            );
+        }
+        else{
+            // duplicate value
+            return node;
+        }
+
+        return checkAndRotateAux(node);
     }
 
     private int getBalanceFactor(TreeNode<T> node) {
@@ -54,17 +78,6 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
         }
         // No rotation was needed.
         return node;
-    }
-
-    private TreeNode<T> checkAndRotate(TreeNode<T> node){
-        if (node == null){
-            return null;
-        }
-        // Let's traversee the tree bottom to top and check if we need to do a rotation
-        node.setLeft(checkAndRotate(node.getLeft()));
-        node.setRight(checkAndRotate(node.getRight()));
-
-        return checkAndRotateAux(node);
     }
 
     private TreeNode<T> rotateLL(TreeNode<T> tempParent){
@@ -115,4 +128,6 @@ public class AVLBinaryTree <T extends Comparable<T>> extends Tree<T> {
     protected TreeNode<T> getTreeNode(T newData) {
         return null;
     }
+
+
 }
