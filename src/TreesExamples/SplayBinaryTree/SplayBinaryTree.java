@@ -24,89 +24,91 @@ public class SplayBinaryTree<T extends Comparable<T>> extends Tree<T> {
         return node;
     }
 
-    private TreeNode<T> rotateRight(TreeNode<T> parent){
+    private TreeNode<T> rotateZig(TreeNode<T> parent){
         TreeNode<T> left = parent.getLeft();
         parent.setLeft(left.getRight());
         left.setRight(parent);
         return left;
     }
 
-    private TreeNode<T> rotateLeft(TreeNode<T> parent){
+    private TreeNode<T> rotateZag(TreeNode<T> parent){
         TreeNode<T> right = parent.getRight();
         parent.setRight(right.getLeft());
         right.setLeft(parent);
         return right;
     }
 
-    private TreeNode<T> splay(TreeNode<T> root, T key){
-        if(root == null){
+    private TreeNode<T> splay(TreeNode<T> tempNode, T key){
+        if(tempNode == null){
             return null;
         }
-        int cmp = root.getData().compareTo(key);
+        int cmp = tempNode.getData().compareTo(key);
         if(cmp == 0){
-            return root;
+            return tempNode;
         }
 
         // LEFT SIDE
         if(cmp > 0){
-            if(root.getLeft() == null){
-                return root;
+            if(tempNode.getLeft() == null){
+                return tempNode;
             }
             int leftCmp =
-                    root.getLeft()
+                    tempNode.getLeft()
                             .getData()
                             .compareTo(key);
-            // Zig-Zig
+            // Zig-(Zig)
             if(leftCmp > 0){
-                root.getLeft().setLeft(
-                        splay(root.getLeft().getLeft(),key));
-                root = rotateRight(root);
+                tempNode.getLeft().setLeft(
+                        splay(tempNode.getLeft().getLeft(),key));
+                tempNode = rotateZig(tempNode);
             }
-            // Zig-Zag
+            // Zig-(Zag)
             else if(leftCmp < 0){
-                root.getLeft().setRight(
-                        splay(root.getLeft().getRight(),key));
+                tempNode.getLeft().setRight(
+                        splay(tempNode.getLeft().getRight(),key));
 
-                if(root.getLeft().getRight()!= null){
-                    root.setLeft(rotateLeft(root.getLeft()));
+                if(tempNode.getLeft().getRight()!= null){
+                    tempNode.setLeft(rotateZag(tempNode.getLeft()));
                 }
             }
-            if(root.getLeft() == null){
-                return root;
+            if(tempNode.getLeft() == null){
+                return tempNode;
             }
-            return rotateRight(root);
+            // Zig
+            return rotateZig(tempNode);
         }
 
         // RIGHT SIDE
         else{
-            if(root.getRight() == null){
-                return root;
+            if(tempNode.getRight() == null){
+                return tempNode;
             }
-            int rightCmp = root.getRight()
+            int rightCmp = tempNode.getRight()
                             .getData()
                             .compareTo(key);
 
-            // Zag-Zag
+            // Zag-(Zag)
             if(rightCmp < 0){
-                root.getRight().setRight(
-                        splay(root.getRight().getRight(),key)
+                tempNode.getRight().setRight(
+                        splay(tempNode.getRight().getRight(),key)
                 );
-                root = rotateLeft(root);
+                tempNode = rotateZag(tempNode);
             }
 
-            // Zag-Zig
+            // Zag-(Zig)
             else if(rightCmp > 0){
-                root.getRight().setLeft(
-                        splay(root.getRight().getLeft(),key)
+                tempNode.getRight().setLeft(
+                        splay(tempNode.getRight().getLeft(),key)
                 );
-                if(root.getRight().getLeft()!= null){
-                    root.setRight(rotateRight(root.getRight()));
+                if(tempNode.getRight().getLeft()!= null){
+                    tempNode.setRight(rotateZig(tempNode.getRight()));
                 }
             }
-            if(root.getRight() == null){
-                return root;
+            if(tempNode.getRight() == null){
+                return tempNode;
             }
-            return rotateLeft(root);
+            // Zag
+            return rotateZag(tempNode);
         }
     }
 
